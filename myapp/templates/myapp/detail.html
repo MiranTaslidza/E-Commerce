@@ -1,0 +1,58 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detail{% endblock title %}
+
+{% block scripts %}
+{% endblock scripts %}
+
+{% block content %}
+<div class="row g-4 align-items-start py-4">
+    <!-- Product Image -->
+    <div class="col-12 col-lg-4">
+        <img class="img-fluid rounded border shadow-sm" src="{{product.image.url}}" alt="{{product.name}}" />
+    </div>
+
+    <!-- Product Details -->
+    <div class="col-12 col-md-6 col-lg-4">
+        <h1 class="h4 fw-bold text-dark mb-3">{{product.name}}</h1>
+        <div class="text-warning mb-3">
+            &#9733;&#9733;&#9733;&#9733;&#9734; <span class="text-dark"> (12,321 ratings)</span>
+        </div>
+        <p class="fs-2 fw-bold text-success mb-3">$ {{product.price}}</p>
+        <p class="small text-success fw-bold mb-3">Inclusive of all taxes</p>
+        <ul>
+            <li>{{product.description}}</li>
+        </ul>
+    </div>
+
+    <!-- Buy Box -->
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="border rounded p-4 shadow">
+            <p class="h4 fw-bold text-dark mb-3">$ {{product.price}}</p>
+            <div class="mb-3">
+                <select class="form-select" name="" id="select" aria-label="Quantity">
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                </select>
+            </div>
+            <p class="small text-success mb-3">FREE delivery by Tomorrow</p>
+            {% if product.stock %}
+            <p class="small text-success mb-3">In stock</p>
+            {% else %}
+            <p class="small text-danger mb-3">Out of stock</p>
+            {% endif %}
+            <div class="d-grid gap-3 mb-3">
+                <button id="atc" value="{{product.id}}" class="btn btn-warning fw-bold py-2">
+                    Add to cart
+                </button>
+                <button class="btn btn-dark fw-bold py-2">
+                    Buy Now
+                </button>
+            </div>
+            <p class="small text-success mb-0">Sold by: ABC Official Store</p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

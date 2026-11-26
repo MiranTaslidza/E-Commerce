@@ -19,3 +19,4 @@ def detail(request, slug):
     }
     
     return render(request, 'myapp/detail.html', context)
+

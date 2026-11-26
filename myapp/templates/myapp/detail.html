@@ -3,8 +3,7 @@
 
 {% block title %}Detail{% endblock title %}
 
-{% block scripts %}
-{% endblock scripts %}
+
 
 {% block content %}
 <div class="row g-4 align-items-start py-4">
@@ -55,4 +54,26 @@
         </div>
     </div>
 </div>
+
 {% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).on("click", "#atc", function (e) { //pristupa dokumentu i prati klik na dugme sa id-jem atc
+        console.log("Add to cart button clicked"); // ispisuje na konzoli klik
+        $.ajax({ //ajax poziv
+            type: "POST",  // tip zahteva je POST
+            url: '{% url "cart_add" %}', //url za dodavanje u korpu
+            data: { // podaci koji se salju na server
+                csrfmiddlewaretoken: "{{csrf_token}}", // token za CSRF zaštitu
+                product_id: $("#atc").val(), // vrednost id-ja proizvoda
+                product_quantity: $("#select option:selected").text(), // vrednost izabranog quantity-ja količina proizvoda koja se stavlja u korpu
+            },
+            success: function (json) { // funkcija koja se poziva kada je zahtev uspešan
+                console.log(json); // ispisuje na konzoli odgovor servera
+                document.getElementById("cart-qty").textContent = json.qty; // menja tekst u elementu sa id-jem cart-qty na novu vrednost iz odgovora servera
+            },
+        });
+    });
+</script>
+{% endblock scripts %}

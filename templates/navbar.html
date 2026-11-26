@@ -8,6 +8,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <!-- linkovi -->
                 <li class="nav-item">
@@ -31,9 +32,30 @@
                         </li>
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
+                    <!-- cart -->
+                    <li class="nav-item">
+                    <a href="{% url 'cart-overview' %}" class="position-relative d-inline-block fs-5 text-decoration-none text-white mt-2">
+                        🛒
+                        <span id="cart-qty"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white">
+                            {% with qty_amount=cart|length %}
+                            <!--Comment-->
+                            {% if qty_amount > 0 %}
+                            <!--Comment-->
+                            {{qty_amount}}
+                            <!--Comment-->
+                            {% else %}
+                            <!--Comment-->
+                            0
+                            <!--Comment-->
+                            {% endif %}
+                            <!--Comment-->
+
+                            {% endwith %}
+                        </span>
+                    </a>
                 </li>
 
         </div>
     </div>
 </nav>
-

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detail{% endblock title %}
+
+
+
+{% block content %}
+
+<h2 class="h2 fw-bold mb-4 text-dark">Your Shopping Cart</h2>
+
+{% if cart %}
+<!--Cart Table-->
+<form method="post" action="">
+  {% csrf_token %}
+  <div class="table-responsive rounded shadow border">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light small text-secondary text-uppercase">
+        <tr>
+          <th class="p-3 text-start">Product Image</th>
+          <th class="p-3 text-start">Product</th>
+          <th class="p-3 text-start">Quantity</th>
+          <th class="p-3 text-start">Unit Price</th>
+          <th class="p-3 text-start">Total</th>
+          <th class="p-3 text-start">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        {% for item in cart %}
+        <!--Comment-->
+
+        <!--Comment-->
+        {% with product=item.product %}
+        <tr class="align-middle">
+          <td class="p-3">
+            <img
+              src="{{ product.image.url }}"
+              alt="{{ product.title }}"
+              class="img-fluid rounded"
+              width="90"
+            />
+          </td>
+          <td class="p-3 fw-bold text-dark">{{ product.name }}</td>
+
+          <!-- <td class="p-2">{{ item.qty }}</td> -->
+          <td class="p-3">
+            <select id="select{{product.id}}" class="form-select form-select-sm">
+              <option selected>{{item.qty}}</option>
+
+              <option value="">1</option>
+
+              <option value="">2</option>
+
+              <option value="">3</option>
+
+              <option value="">4</option>
+            </select>
+          </td>
+
+          <td class="p-3 text-secondary">₹{{ item.price }} €</td>
+          <td class="p-3 text-secondary">₹{{ item.total }}</td>
+
+          <td class="p-3 text-nowrap">
+            <button
+              type="button"
+              name="update"
+              data-index="{{product.id}}"
+              value="{{product.id}}"
+              class="update btn btn-primary btn-sm me-2"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              name="delete"
+              data-index="{{product.id}}"
+              value="{{product.id}}"
+              class="delete btn btn-danger btn-sm"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% endwith %}
+        <!--Comment-->
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</form>
+<!--End Cart Table-->
+
+<!--Cart Total-->
+<div class="mt-4 text-end pe-2">
+  <strong class="fs-5 text-dark" id="total"
+    >Total: ₹{{ cart.get_total_price}} €</strong
+  >
+</div>
+{% else %}
+<!--Empty Cart Message-->
+<p class="text-secondary text-center fs-5 mt-5">Your cart is empty.</p>
+{% endif %}
+
+
+{% endblock content %}
+
+{% block scripts %}
+<!--Comment-->
+<script>
+  $(document).on("click", ".delete", function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "{% url 'cart_delete' %}",
+      data: {
+        product_id: $(this).data("index"),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "post",
+      },
+      success: function (json) {
+        location.reload();
+        // document.getElementById("cart-qty").textContent = json.qty;
+        // document.getElementById("total").textContent = json.total;
+      },
+    });
+  });
+
+  // Update functionality
+  $(document).on("click", ".update", function (e) {
+    e.preventDefault();
+    var productID = $(this).data("index");
+    var productQTY = $("#select" + productID + " option:selected").text();
+    console.log(productID);
+    console.log(productQTY);
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'cart_update' %}",
+      data: {
+        product_id: $(this).data("index"),
+        product_quantity: $("#select" + productID + " option:selected").text(),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "post",
+      },
+      success: function (e) {
+        location.reload();
+      },
+    });
+  });
+</script>
+{% endblock scripts %}
+
+
